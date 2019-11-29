@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+{% block head %}
+<style>
+  /* Always set the map height explicitly to define the size of the div
+   * element that contains the map. */
+  #map {
+    height: 650px;
+  }
+  /* Optional: Makes the sample page fill the window. */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+  <div id="map"></div>
+
+  <script>
+    var map;
+    function initMap() {
+      var src = 'http://omega.tuke.sk/student/patricia.macejova/VN_PB_KE_okolie.kml';
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 48.431, lng: 21.153},
+        zoom: 8
+      });
+
+      /*var marker = new google.maps.Marker({
+        position: {lat: 48.431, lng: 21.153},
+        map: map
+      });
+
+      var infowindow = new google.maps.InfoWindow({
+        content: '<p>Obrázek</p>'
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+      });*/
+
+      var kmlLayer = new google.maps.KmlLayer(src, {
+        suppressInfoWindows: true,
+        preserveViewport: false,
+        map: map
+      });
+      kmlLayer.addListener('click', function(event) {
+        var content = event.featureData.infoWindowHtml;
+        var testimonial = document.getElementById('capture');
+        testimonial.innerHTML = content;
+      });
+    }
+  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTmKs9jLCIBmR60Ulk-Yy4wV1HfLmxARg
+&callback=initMap&language=sk" async defer></script>
+  {% include 'footer.html' %}
+{% endblock %}
+
